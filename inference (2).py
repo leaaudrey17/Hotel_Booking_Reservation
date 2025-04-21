@@ -173,4 +173,22 @@ lower_bound = Q1 - 1.5 * IQR
 upper_bound = Q3 + 1.5 * IQR
 
 input_data[numerical_cols] = input_data[numerical_cols].apply(lambda x: np.where(x < lower_bound[x.name], lower_bound[x.name], x))
-input_data[n
+input_data[numerical_cols] = input_data[numerical_cols].apply(lambda x: np.where(x > upper_bound[x.name], upper_bound[x.name], x))
+
+scaler = StandardScaler()
+input_data[numerical_cols] = scaler.fit_transform(input_data[numerical_cols])
+
+# Prediction on the input data
+prediction = model_rf.predict(input_data)
+
+# Display result with custom alert style
+if prediction[0] == 1:
+    result = "The booking is likely to be canceled."
+else:
+    result = "The booking is likely to be confirmed."
+
+st.markdown(f"""
+    <div class="stAlert">
+    <strong>Prediction Result:</strong> {result}
+    </div>
+""", unsafe_allow_html=True)
