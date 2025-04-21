@@ -68,13 +68,6 @@ input_data = {
 # Convert to DataFrame
 input_df = pd.DataFrame([input_data])
 
-# Load scaler dan transform
-scaler = joblib.load("scaler.pkl")
-numerical_cols = ['no_of_adults', 'no_of_children', 'no_of_weekend_nights', 'no_of_week_nights',
-                  'lead_time', 'avg_price_per_room', 'no_of_previous_cancellations',
-                  'no_of_previous_bookings_not_canceled', 'no_of_special_requests', 'arrival_year']
-input_df[numerical_cols] = scaler.transform(input_df[numerical_cols])
-
 # Prediksi
 if st.button("Prediksi"):
     prediction = model.predict(input_df)[0]
