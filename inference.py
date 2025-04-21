@@ -54,6 +54,14 @@ st.markdown("""
             font-size: 32px;
             margin-right: 8px;
         }
+
+        .stSlider .st-bb {
+            font-size: 14px;
+        }
+
+        .stNumberInput {
+            background-color: #fce4ec;
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -61,24 +69,29 @@ st.markdown("""
 st.title("🌸 Hotel Booking Status Prediction 🌸")
 st.write("Masukkan data reservasi untuk memprediksi apakah akan dibatalkan atau tidak. ✨")
 
-# Input data dari user
-no_of_adults = st.number_input("👫 Jumlah Dewasa", min_value=0, value=2)
-no_of_children = st.number_input("👶 Jumlah Anak", min_value=0, value=0)
-no_of_weekend_nights = st.number_input("🌙 Jumlah Malam Akhir Pekan", min_value=0, value=1)
-no_of_week_nights = st.number_input("🌜 Jumlah Malam Hari Kerja", min_value=0, value=2)
-type_of_meal_plan = st.selectbox("🍽️ Meal Plan", ['Meal Plan 1', 'Meal Plan 2', 'Meal Plan 3'])
-required_car_parking_space = st.selectbox("🚗 Butuh Parkir Mobil?", [0, 1])
-room_type_reserved = st.selectbox("🏨 Tipe Kamar", ['Room_Type 1', 'Room_Type 2', 'Room_Type 3', 'Room_Type 4', 'Room_Type 5', 'Room_Type 6', 'Room_Type 7'])
-lead_time = st.number_input("⏳ Lead Time (hari sebelum menginap)", min_value=0, value=10)
-arrival_year = st.selectbox("📅 Tahun Kedatangan", [2017, 2018])
-arrival_month = st.number_input("📆 Bulan Kedatangan (1-12)", min_value=1, max_value=12, value=1)
-arrival_date = st.number_input("📅 Tanggal Kedatangan (1-31)", min_value=1, max_value=31, value=1)
-market_segment_type = st.selectbox("💼 Tipe Market", ['Offline', 'Online', 'Corporate', 'Aviation', 'Complementary'])
-repeated_guest = st.selectbox("👥 Guest Kembali?", [0, 1])
-avg_price_per_room = st.number_input("💸 Rata-rata Harga per Kamar", min_value=0.0, value=100.0)
-no_of_previous_cancellations = st.number_input("🛑 Jumlah Pembatalan Sebelumnya", min_value=0, value=0)
-no_of_previous_bookings_not_canceled = st.number_input("✔️ Jumlah Pemesanan Sebelumnya yg Tidak Dibatalkan", min_value=0, value=0)
-no_of_special_requests = st.number_input("🎁 Jumlah Permintaan Khusus", min_value=0, value=0)
+# Layout Grid untuk Input Data
+col1, col2 = st.columns(2)
+
+with col1:
+    no_of_adults = st.slider("👫 Jumlah Dewasa", min_value=0, max_value=10, value=2)
+    no_of_children = st.slider("👶 Jumlah Anak", min_value=0, max_value=5, value=0)
+    no_of_weekend_nights = st.slider("🌙 Jumlah Malam Akhir Pekan", min_value=0, max_value=7, value=1)
+    no_of_week_nights = st.slider("🌜 Jumlah Malam Hari Kerja", min_value=0, max_value=7, value=2)
+    lead_time = st.slider("⏳ Lead Time (hari sebelum menginap)", min_value=0, max_value=365, value=10)
+    arrival_year = st.selectbox("📅 Tahun Kedatangan", [2017, 2018])
+    arrival_month = st.slider("📆 Bulan Kedatangan", min_value=1, max_value=12, value=1)
+    arrival_date = st.slider("📅 Tanggal Kedatangan", min_value=1, max_value=31, value=1)
+
+with col2:
+    type_of_meal_plan = st.selectbox("🍽️ Meal Plan", ['Meal Plan 1', 'Meal Plan 2', 'Meal Plan 3'])
+    required_car_parking_space = st.selectbox("🚗 Butuh Parkir Mobil?", [0, 1])
+    room_type_reserved = st.selectbox("🏨 Tipe Kamar", ['Room_Type 1', 'Room_Type 2', 'Room_Type 3', 'Room_Type 4', 'Room_Type 5', 'Room_Type 6', 'Room_Type 7'])
+    market_segment_type = st.selectbox("💼 Tipe Market", ['Offline', 'Online', 'Corporate', 'Aviation', 'Complementary'])
+    repeated_guest = st.selectbox("👥 Guest Kembali?", [0, 1])
+    avg_price_per_room = st.slider("💸 Rata-rata Harga per Kamar", min_value=0.0, max_value=500.0, value=100.0)
+    no_of_previous_cancellations = st.slider("🛑 Jumlah Pembatalan Sebelumnya", min_value=0, max_value=10, value=0)
+    no_of_previous_bookings_not_canceled = st.slider("✔️ Jumlah Pemesanan Sebelumnya yg Tidak Dibatalkan", min_value=0, max_value=10, value=0)
+    no_of_special_requests = st.slider("🎁 Jumlah Permintaan Khusus", min_value=0, max_value=5, value=0)
 
 # One-hot encoding manual (harus sama dengan preprocessing training)
 required_car_parking_space = int(required_car_parking_space)
