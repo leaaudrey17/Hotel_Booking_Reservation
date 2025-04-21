@@ -1,6 +1,8 @@
 import streamlit as st
 import joblib
 import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler
 
 # Load the trained Random Forest model
 model_rf = joblib.load('random_forest_model1.pkl')
@@ -60,6 +62,25 @@ input_data = pd.DataFrame({
     'market_segment_type_Offline': [1 if market_segment_type == 'Offline' else 0],
     'market_segment_type_Online': [1 if market_segment_type == 'Online' else 0],
 })
+
+# Handle outliers for numeric columns (based on IQR)
+numerical_cols = ['no_of_adults', 'no_of_children', 'no_of_weekend_nights', 'no_of_week_nights',
+                  'lead_time', 'avg_price_per_room', 'no_of_previous_cancellations',
+                  'no_of_previous_bookings_not_canceled', 'no_of_special_requests', 'arrival_year']
+
+Q1 = input_data[numerical_cols].quantile(0.25)
+Q3 = input_data[numerical_cols].quantile(0.75)
+IQR = Q3 - Q1
+
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+
+input_data[numerical_cols] = input_data[numerical_cols].apply(lambda x: np.where(x < lower_bound[x.name], lower_bound[x.name], x))
+input_data[numerical_cols] = input_data[numerical_cols].apply(lambda x: np.where(x > upper_bound[x.name], upper_bound[x.name], x))
+
+# Scaling the numeric features
+scaler = StandardScaler()
+input_data[numerical_cols] = scaler.fit_transform(input_data[numerical_cols])
 
 # Prediction when the user clicks the button
 if st.button('Predict'):
