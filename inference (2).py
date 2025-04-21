@@ -187,18 +187,28 @@ input_data[numerical_cols] = scaler.fit_transform(input_data[numerical_cols])
 
 # Prediction when user clicks "Predict"
 if st.button('Predict! 🎉'):
-    prediction = model_rf.predict(input_data)
+    # Get probabilities for each class (Canceled, Not Canceled)
+    prediction_proba = model_rf.predict_proba(input_data)
 
-    # Display result with emoji and short, fun text
-    if prediction[0] == 1:
+    # Extract the probability for the "Canceled" class (index 1)
+    canceled_prob = prediction_proba[0][1]
+
+    # Display probability and use a threshold to classify
+    threshold = 0.5  # You can adjust this threshold as needed
+
+    if canceled_prob >= threshold:
         st.markdown(f"""
             <div class="stAlert">
-                <strong>Uh-oh! 😕</strong><br> Your booking might be canceled! 😱 Check your details and try again! 
+                <strong>Uh-oh! 😕</strong><br> Your booking might be canceled! 😱 
+                <br> Cancellation probability: {canceled_prob * 100:.2f}%<br> 
+                Check your details and try again!
             </div>
         """, unsafe_allow_html=True)
     else:
         st.markdown(f"""
             <div class="stAlert">
-                <strong>Awesome! 🎉</strong><br> Your booking is safe! 😎 Enjoy your stay, no worries! 
+                <strong>Awesome! 🎉</strong><br> Your booking is safe! 😎 
+                <br> Cancellation probability: {canceled_prob * 100:.2f}%<br> 
+                Enjoy your stay, no worries!
             </div>
         """, unsafe_allow_html=True)
