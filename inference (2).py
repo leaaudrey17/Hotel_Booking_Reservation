@@ -53,7 +53,7 @@ st.markdown("""
         margin-top: 10px;
     }
     .stAlert {
-        background-color: #f9d1e7;
+        background-color: #f8e2e7;  /* Soft pastel pink background for alert */
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -89,7 +89,7 @@ st.markdown("""
 
 # Create a container for the input fields to make the layout clean and organized
 with st.container():
-    st.subheader('Enter the booking details:')
+    st.subheader('Enter the booking details:') 
     
     # Create a grid of input fields inside the container
     col1, col2 = st.columns(2)
@@ -113,7 +113,7 @@ with st.container():
     st.markdown('<hr>', unsafe_allow_html=True)
 
     # Create another container for price-related inputs
-    st.subheader('Pricing and Special Requests:')
+    st.subheader('Pricing and Special Requests:') 
     
     col3, col4 = st.columns(2)
 
@@ -173,12 +173,4 @@ lower_bound = Q1 - 1.5 * IQR
 upper_bound = Q3 + 1.5 * IQR
 
 input_data[numerical_cols] = input_data[numerical_cols].apply(lambda x: np.where(x < lower_bound[x.name], lower_bound[x.name], x))
-input_data[numerical_cols] = input_data[numerical_cols].apply(lambda x: np.where(x > upper_bound[x.name], upper_bound[x.name], x))
-
-scaler = StandardScaler()
-input_data[numerical_cols] = scaler.fit_transform(input_data[numerical_cols])
-
-# Prediction
-if st.button('Predict'):
-    prediction = model_rf.predict(input_data)
-    st.markdown(f'<div class="stAlert"><strong>Predicted Booking Status:</strong> {"Not Canceled" if prediction[0] == 0 else "Canceled"}</div>', unsafe_allow_html=True)
+input_data[n
