@@ -14,7 +14,7 @@ no_of_adults = st.number_input('Number of Adults', min_value=1, max_value=10, va
 no_of_children = st.number_input('Number of Children', min_value=0, max_value=5, value=0)
 no_of_weekend_nights = st.number_input('Number of Weekend Nights', min_value=0, max_value=7, value=1)
 no_of_week_nights = st.number_input('Number of Week Nights', min_value=0, max_value=7, value=2)
-required_car_parking_space = st.selectbox('Car Parking Space Required', ['Yes', 'No'])
+required_car_parking_space = st.selectbox('Car Parking Space Required', [0, 1])
 lead_time = st.number_input('Lead Time (days)', min_value=0, value=10)
 arrival_year = st.number_input('Arrival Year', min_value=2000, max_value=2025, value=2023)
 arrival_month = st.number_input('Arrival Month', min_value=1, max_value=12, value=6)
@@ -24,8 +24,6 @@ no_of_previous_cancellations = st.number_input('Number of Previous Cancellations
 no_of_previous_bookings_not_canceled = st.number_input('Number of Previous Bookings Not Canceled', min_value=0, max_value=58, value=0)
 avg_price_per_room = st.number_input('Average Price per Room', min_value=0.0, max_value=540.0, value=100.0)
 no_of_special_requests = st.number_input('Number of Special Requests', min_value=0, max_value=5, value=0)
-
-required_car_parking_space_value = 1 if required_car_parking_space == 'Yes' else 0
 
 # Encoding categorical features (e.g., meal plan, room type, market segment)
 type_of_meal_plan = st.selectbox('Meal Plan Type', ['Meal Plan 1', 'Meal Plan 2', 'Meal Plan 3', 'Not Selected'])
