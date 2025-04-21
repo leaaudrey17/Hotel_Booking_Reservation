@@ -13,7 +13,7 @@ import numpy as np
 import joblib
 
 # Load model
-model = joblib.load("random_forest.pkl.pkl")
+model = joblib.load("random_forest.pkl")
 
 # Title
 st.title("Hotel Booking Status Prediction")
