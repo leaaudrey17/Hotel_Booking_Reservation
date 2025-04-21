@@ -35,7 +35,7 @@ def preprocess_input(input_data):
     # Scaling numeric columns
     numerical_cols = ['no_of_adults', 'no_of_children', 'no_of_weekend_nights', 'no_of_week_nights',
                       'lead_time', 'avg_price_per_room', 'no_of_previous_cancellations',
-                      'no_of_previous_bookings_not_canceled', 'no_of_special_requests', 'arrival_year']
+                      'no_of_previous_bookings_not_canceled', 'no_of_special_requests', 'arrival_year', 'required_car_parking_space']
     scaler = StandardScaler()
     df[numerical_cols] = scaler.fit_transform(df[numerical_cols])
 
@@ -58,7 +58,8 @@ input_data = {
     'arrival_year': st.number_input('Arrival Year (2017 or 2018)', min_value=2017, max_value=2018, value=2017),
     'type_of_meal_plan': st.selectbox('Meal Plan Type', options=['Meal Plan 1', 'Meal Plan 2', 'Meal Plan 3']),
     'room_type_reserved': st.selectbox('Room Type Reserved', options=['Room Type 1', 'Room Type 2']),
-    'market_segment_type': st.selectbox('Market Segment Type', options=['Segment 1', 'Segment 2'])
+    'market_segment_type': st.selectbox('Market Segment Type', options=['Segment 1', 'Segment 2']),
+    'required_car_parking_space': st.number_input('Required Car Parking Space (0 or 1)', min_value=0, max_value=1, value=0)  # Added input
 }
 
 # Preprocess the input data
