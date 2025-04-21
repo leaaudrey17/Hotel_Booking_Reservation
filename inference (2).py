@@ -193,9 +193,10 @@ if st.button('Predict! 🎉'):
     # Extract the probability for the "Canceled" class (index 1)
     canceled_prob = prediction_proba[0][1]
 
-    # Display probability and use a threshold to classify
-    threshold = 0.5  # You can adjust this threshold as needed
+    # Allow user to adjust the threshold (default 0.5)
+    threshold = st.slider('Adjust Threshold for Cancellation Probability 📊', min_value=0.0, max_value=1.0, value=0.5)
 
+    # Display probability and use the threshold to classify
     if canceled_prob >= threshold:
         st.markdown(f"""
             <div class="stAlert">
