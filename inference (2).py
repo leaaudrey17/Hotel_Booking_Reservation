@@ -97,7 +97,7 @@ st.markdown('<hr>', unsafe_allow_html=True)
 # Description of the app with emoji
 st.markdown("""
     <div class="stText">
-    Welcome to the Hotel Booking Cancellation Predictor! 🎉 Fill in the details and click 'Predict' to check if your booking is safe! 🌟
+    Welcome to the Hotel Booking Cancellation Predictor! check if your booking is safe! 🌟
     </div>
 """, unsafe_allow_html=True)
 
