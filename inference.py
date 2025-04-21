@@ -1,12 +1,8 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import joblib
 
-model = joblib.load('model_rf.pkl')
-
-
-# Mengatur tema pastel pink dengan CSS dan emoji
+# Apply pastel pink theme using CSS
 st.markdown("""
     <style>
         body {
@@ -73,7 +69,7 @@ st.markdown("""
 st.title("🌸 Hotel Booking Status Prediction 🌸")
 st.write("Masukkan data reservasi untuk memprediksi apakah akan dibatalkan atau tidak. ✨")
 
-# Layout Grid untuk Input Data
+# Layout Grid for input data
 col1, col2 = st.columns(2)
 
 with col1:
@@ -111,35 +107,47 @@ room_type = [1 if room_type_reserved == rt else 0 for rt in room_type_columns]
 market_segment_columns = ['Offline', 'Online', 'Corporate', 'Aviation', 'Complementary']
 market_segment = [1 if market_segment_type == ms else 0 for ms in market_segment_columns]
 
-# Membuat dataframe untuk input yang sudah di-encode
+# Create the input dataframe with one-hot encoded columns
 input_data = {
-    'no_of_adults': no_of_adults,
-    'no_of_children': no_of_children,
-    'no_of_weekend_nights': no_of_weekend_nights,
-    'no_of_week_nights': no_of_week_nights,
-    'required_car_parking_space': required_car_parking_space,
-    'lead_time': lead_time,
-    'arrival_year': 0 if arrival_year == 2017 else 1,
-    'avg_price_per_room': avg_price_per_room,
-    'no_of_previous_cancellations': no_of_previous_cancellations,
-    'no_of_previous_bookings_not_canceled': no_of_previous_bookings_not_canceled,
-    'no_of_special_requests': no_of_special_requests,
+    'no_of_adults': [no_of_adults],
+    'no_of_children': [no_of_children],
+    'no_of_weekend_nights': [no_of_weekend_nights],
+    'no_of_week_nights': [no_of_week_nights],
+    'required_car_parking_space': [required_car_parking_space],
+    'lead_time': [lead_time],
+    'arrival_year': [arrival_year],
+    'arrival_month': [arrival_month],
+    'arrival_date': [arrival_date],
+    'repeated_guest': [repeated_guest],
+    'no_of_previous_cancellations': [no_of_previous_cancellations],
+    'no_of_previous_bookings_not_canceled': [no_of_previous_bookings_not_canceled],
+    'avg_price_per_room': [avg_price_per_room],
+    'no_of_special_requests': [no_of_special_requests],
+    'type_of_meal_plan_Meal Plan 2': meal_plan[1],
+    'type_of_meal_plan_Meal Plan 3': meal_plan[2],
+    'type_of_meal_plan_Not Selected': meal_plan[0],
+    'room_type_reserved_Room_Type 2': room_type[1],
+    'room_type_reserved_Room_Type 3': room_type[2],
+    'room_type_reserved_Room_Type 4': room_type[3],
+    'room_type_reserved_Room_Type 5': room_type[4],
+    'room_type_reserved_Room_Type 6': room_type[5],
+    'room_type_reserved_Room_Type 7': room_type[6],
+    'market_segment_type_Complementary': market_segment[4],
+    'market_segment_type_Corporate': market_segment[2],
+    'market_segment_type_Offline': market_segment[0],
+    'market_segment_type_Online': market_segment[1]
 }
-
-# Gabungkan kolom one-hot encoding ke dalam input_data
-input_data.update(dict(zip(meal_plan_columns, meal_plan)))
-input_data.update(dict(zip(room_type_columns, room_type)))
-input_data.update(dict(zip(market_segment_columns, market_segment)))
 
 # Convert to DataFrame
 input_df = pd.DataFrame([input_data])
 
+# Memuat model yang telah disimpan dengan pickle
+with open('model_rf.pkl', 'rb') as model_file:
+    model_rf = pickle.load(model_file)
+
 # Prediksi
 if st.button("🔮 Prediksi"):
-    prediction = model.predict(input_df)[0]  
-    status = "Canceled" if prediction == 1 else "Not Canceled"
-    
-    if prediction == 1:
-        st.error(f"❌ Status Booking: **{status}**")
-    else:
-        st.success(f"✅ Status Booking: **{status}**")
+    # Melakukan prediksi menggunakan model yang dimuat
+    prediction = model_rf.predict(input_df)
+    status = "Canceled" if prediction[0] == 1 else "Not Canceled"
+    st.success(f"🎉 Status Booking: **{status}**")
