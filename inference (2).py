@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 # Load the trained Random Forest model
 model_rf = joblib.load('model_rf1.pkl')
 
-# Streamlit UI elements with custom CSS for pastel pink theme and aesthetic design
+# Streamlit UI elements with custom CSS for pastel pink and blue theme
 st.markdown("""
     <style>
     body {
@@ -29,17 +29,17 @@ st.markdown("""
         background-color: #f29bb6;  /* Darker pink on hover */
     }
     .stSelectbox, .stSlider, .stNumberInput {
-        background-color: #fff4f8;  /* Light pink for input fields */
+        background-color: #e0f7fa;  /* Light pastel blue for input fields */
         border-radius: 8px;
         margin-top: 10px;
         padding: 10px;
         font-size: 14px;
-        border: 1px solid #f3c6d2;
+        border: 1px solid #b2ebf2;
     }
     .stSelectbox>div>div>input, .stSlider>div>div>input, .stNumberInput>div>div>input {
         padding: 12px;
         border-radius: 8px;
-        border: 1px solid #f6c6d3;
+        border: 1px solid #b2ebf2;
     }
     .stTitle {
         color: #6f3f56;
@@ -78,6 +78,14 @@ st.markdown("""
 st.title('Hotel Booking Cancellation Prediction')
 
 st.markdown('<hr>', unsafe_allow_html=True)
+
+# Description of the app
+st.markdown("""
+    <div class="stText">
+    This app predicts whether a hotel booking will be canceled or not based on various input features. 
+    Fill in the details below and click on 'Predict' to get your result.
+    </div>
+""", unsafe_allow_html=True)
 
 # Description of the app
 st.markdown("""
