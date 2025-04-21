@@ -1,6 +1,10 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import joblib
+
+model = joblib.load('random_forest.pkl')  # pastikan path-nya benar sesuai tempat file kamu
+
 
 # Mengatur tema pastel pink dengan CSS dan emoji
 st.markdown("""
@@ -132,7 +136,10 @@ input_df = pd.DataFrame([input_data])
 
 # Prediksi
 if st.button("🔮 Prediksi"):
-    # Untuk demo, misalnya model prediksi acak (untuk testing)
-    prediction = np.random.choice([0, 1])
+    prediction = model.predict(input_df)[0]  # ambil hasil prediksi (0 atau 1)
     status = "Canceled" if prediction == 1 else "Not Canceled"
-    st.success(f"🎉 Status Booking: **{status}**")
+    
+    if prediction == 1:
+        st.error(f"❌ Status Booking: **{status}**")
+    else:
+        st.success(f"✅ Status Booking: **{status}**")
