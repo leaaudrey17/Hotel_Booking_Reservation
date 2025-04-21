@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import joblib
 
-model = joblib.load('random_forest.pkl')  # pastikan path-nya benar sesuai tempat file kamu
+model = joblib.load('random_forest.pkl')  
 
 
 # Mengatur tema pastel pink dengan CSS dan emoji
@@ -136,7 +136,7 @@ input_df = pd.DataFrame([input_data])
 
 # Prediksi
 if st.button("🔮 Prediksi"):
-    prediction = model.predict(input_df)[0]  # ambil hasil prediksi (0 atau 1)
+    prediction = model.predict(input_df)[0]  
     status = "Canceled" if prediction == 1 else "Not Canceled"
     
     if prediction == 1:
