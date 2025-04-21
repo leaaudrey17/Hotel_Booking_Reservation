@@ -74,57 +74,56 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Header for the app
-st.title('Hotel Booking Cancellation Prediction')
+# Header for the app with emoji
+st.title('Hotel Booking Cancellation Prediction 🏨❌')
 
 st.markdown('<hr>', unsafe_allow_html=True)
 
-# Description of the app
+# Description of the app with emoji
 st.markdown("""
     <div class="stText">
-    This app predicts whether a hotel booking will be canceled or not based on various input features. 
-    Fill in the details below and click on 'Predict' to get your result.
+    Welcome to the Hotel Booking Cancellation Predictor! Just fill in the details and hit the 'Predict' button to see if your booking is safe or not! 🎉
     </div>
 """, unsafe_allow_html=True)
 
-# Create a container for the input fields to make the layout clean and organized
+# Create a container for the input fields with emojis
 with st.container():
-    st.subheader('Enter the booking details:') 
+    st.subheader('Enter the booking details 📝') 
     
     # Create a grid of input fields inside the container
     col1, col2 = st.columns(2)
 
     with col1:
-        no_of_adults = st.slider('Number of Adults', min_value=0, max_value=5, value=2)
-        no_of_children = st.slider('Number of Children', min_value=0, max_value=10, value=0)
-        no_of_weekend_nights = st.slider('Number of Weekend Nights', min_value=1, max_value=8, value=1)
-        required_car_parking_space = st.selectbox('Car Parking Space Required', [0, 1])
-        lead_time = st.number_input('Lead Time (days)', min_value=0, value=10)
-        arrival_year = st.selectbox('Arrival Year', [2017, 2018])
+        no_of_adults = st.slider('Number of Adults 👨‍👩‍👧‍👦', min_value=0, max_value=5, value=2)
+        no_of_children = st.slider('Number of Children 👶', min_value=0, max_value=10, value=0)
+        no_of_weekend_nights = st.slider('Number of Weekend Nights 🌅', min_value=1, max_value=8, value=1)
+        required_car_parking_space = st.selectbox('Car Parking Space Required 🚗', [0, 1])
+        lead_time = st.number_input('Lead Time (days) ⏳', min_value=0, value=10)
+        arrival_year = st.selectbox('Arrival Year 📅', [2017, 2018])
 
     with col2:
-        no_of_week_nights = st.slider('Number of Week Nights', min_value=0, max_value=7, value=2)
-        arrival_month = st.slider('Arrival Month', min_value=1, max_value=12, value=6)
-        arrival_date = st.slider('Arrival Date', min_value=1, max_value=31, value=15)
-        repeated_guest = st.selectbox('Repeated Guest', [0, 1])
-        no_of_previous_cancellations = st.slider('Number of Previous Cancellations', min_value=0, max_value=13, value=0)
-        no_of_previous_bookings_not_canceled = st.slider('Number of Previous Bookings Not Canceled', min_value=0, max_value=58, value=0)
+        no_of_week_nights = st.slider('Number of Week Nights 🏙️', min_value=0, max_value=7, value=2)
+        arrival_month = st.slider('Arrival Month 🌸', min_value=1, max_value=12, value=6)
+        arrival_date = st.slider('Arrival Date 📆', min_value=1, max_value=31, value=15)
+        repeated_guest = st.selectbox('Repeated Guest 🔄', [0, 1])
+        no_of_previous_cancellations = st.slider('Number of Previous Cancellations ❌', min_value=0, max_value=13, value=0)
+        no_of_previous_bookings_not_canceled = st.slider('Number of Previous Bookings Not Canceled ✅', min_value=0, max_value=58, value=0)
 
     st.markdown('<hr>', unsafe_allow_html=True)
 
-    # Create another container for price-related inputs
-    st.subheader('Pricing and Special Requests:') 
+    # Create another container for price-related inputs with emojis
+    st.subheader('Pricing and Special Requests 💸') 
     
     col3, col4 = st.columns(2)
 
     with col3:
-        avg_price_per_room = st.slider('Average Price per Room', min_value=0.0, max_value=540.0, value=100.0)
-        no_of_special_requests = st.slider('Number of Special Requests', min_value=0, max_value=5, value=0)
+        avg_price_per_room = st.slider('Average Price per Room 💰', min_value=0.0, max_value=540.0, value=100.0)
+        no_of_special_requests = st.slider('Number of Special Requests 🌟', min_value=0, max_value=5, value=0)
 
-    # Encoding categorical features with dropdowns
-    type_of_meal_plan = st.selectbox('Meal Plan Type', ['Meal Plan 1', 'Meal Plan 2', 'Meal Plan 3', 'Not Selected'])
-    room_type_reserved = st.selectbox('Room Type Reserved', ['Room Type 1', 'Room Type 2', 'Room Type 3', 'Room Type 4', 'Room Type 5', 'Room Type 6', 'Room Type 7'])
-    market_segment_type = st.selectbox('Market Segment Type', ['Aviation', 'Complementary', 'Corporate', 'Offline', 'Online'])
+    # Encoding categorical features with dropdowns and emojis
+    type_of_meal_plan = st.selectbox('Meal Plan Type 🍽️', ['Meal Plan 1', 'Meal Plan 2', 'Meal Plan 3', 'Not Selected'])
+    room_type_reserved = st.selectbox('Room Type Reserved 🛏️', ['Room Type 1', 'Room Type 2', 'Room Type 3', 'Room Type 4', 'Room Type 5', 'Room Type 6', 'Room Type 7'])
+    market_segment_type = st.selectbox('Market Segment Type 📊', ['Aviation', 'Complementary', 'Corporate', 'Offline', 'Online'])
 
 # Prepare the input data for the model
 input_data = pd.DataFrame({
@@ -169,26 +168,27 @@ Q1 = input_data[numerical_cols].quantile(0.25)
 Q3 = input_data[numerical_cols].quantile(0.75)
 IQR = Q3 - Q1
 
-lower_bound = Q1 - 1.5 * IQR
-upper_bound = Q3 + 1.5 * IQR
+# Remove outliers based on IQR
+input_data = input_data[~((input_data[numerical_cols] < (Q1 - 1.5 * IQR)) | (input_data[numerical_cols] > (Q3 + 1.5 * IQR))).any(axis=1)]
 
-input_data[numerical_cols] = input_data[numerical_cols].apply(lambda x: np.where(x < lower_bound[x.name], lower_bound[x.name], x))
-input_data[numerical_cols] = input_data[numerical_cols].apply(lambda x: np.where(x > upper_bound[x.name], upper_bound[x.name], x))
-
+# Standardize numerical features
 scaler = StandardScaler()
 input_data[numerical_cols] = scaler.fit_transform(input_data[numerical_cols])
 
-# Prediction on the input data
-prediction = model_rf.predict(input_data)
+# Prediction when user clicks "Predict"
+if st.button('Predict! 🎉'):
+    prediction = model_rf.predict(input_data)
 
-# Display result with custom alert style
-if prediction[0] == 1:
-    result = "The booking is likely to be canceled."
-else:
-    result = "The booking is likely to be confirmed."
-
-st.markdown(f"""
-    <div class="stAlert">
-    <strong>Prediction Result:</strong> {result}
-    </div>
-""", unsafe_allow_html=True)
+    # Display result with emoji and shorter text
+    if prediction[0] == 1:
+        st.markdown(f"""
+            <div class="stAlert">
+                <strong>Uh-oh! 😕</strong><br> Your booking might be canceled! 😱 Double-check your details and try again! 
+            </div>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown(f"""
+            <div class="stAlert">
+                <strong>Awesome! 🎉</strong><br> Your booking is safe! 😎 Enjoy your stay, no worries! 
+            </div>
+        """, unsafe_allow_html=True)
