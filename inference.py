@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import joblib
 
-model = joblib.load('random_forest.pkl')  
+model = joblib.load('model_rf.pkl')
 
 
 # Mengatur tema pastel pink dengan CSS dan emoji
