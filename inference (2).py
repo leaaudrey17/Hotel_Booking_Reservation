@@ -3,7 +3,7 @@ import joblib
 import pandas as pd
 
 # Load the trained Random Forest model
-model_rf = joblib.load('model_rf.pkl')
+model_rf = joblib.load('model_xg.pkl')
 
 # Streamlit UI elements
 st.title('Hotel Booking Cancellation Prediction')
