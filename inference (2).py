@@ -7,13 +7,8 @@ from sklearn.preprocessing import StandardScaler
 # Load the pre-trained model
 model = joblib.load('model_rf.pkl')
 
-# Define the function to preprocess the input data
 def preprocess_input(input_data):
-    # Perform preprocessing steps like scaling and encoding as done in the training data
-    # Replace this with actual preprocessing logic as per your trained dataset
-
-    # Example preprocessing steps
-    # Assume input_data is a dictionary or pandas DataFrame for the user's input
+    # Transform input data to dataframe
     df = pd.DataFrame([input_data])
 
     # Handling missing values (same logic as in your preprocessing)
@@ -28,6 +23,7 @@ def preprocess_input(input_data):
         dummies = pd.get_dummies(df[col], prefix=col, drop_first=True)
         dummy_frames.append(dummies)
 
+    # Concatenate dummy variables to the original dataframe and drop the original categorical columns
     dummies_all = pd.concat(dummy_frames, axis=1)
     df.drop(columns=one_hot_cols, inplace=True)
     df = pd.concat([df, dummies_all], axis=1)
@@ -35,9 +31,26 @@ def preprocess_input(input_data):
     # Scaling numeric columns
     numerical_cols = ['no_of_adults', 'no_of_children', 'no_of_weekend_nights', 'no_of_week_nights',
                       'lead_time', 'avg_price_per_room', 'no_of_previous_cancellations',
-                      'no_of_previous_bookings_not_canceled', 'no_of_special_requests', 'arrival_year', 'required_car_parking_space']
+                      'no_of_previous_bookings_not_canceled', 'no_of_special_requests', 'arrival_year']
     scaler = StandardScaler()
     df[numerical_cols] = scaler.fit_transform(df[numerical_cols])
+
+    # Ensure the column order matches what the model expects
+    expected_column_order = ['no_of_adults', 'no_of_children', 'no_of_weekend_nights', 
+                             'no_of_week_nights', 'required_car_parking_space', 'lead_time', 
+                             'arrival_year', 'arrival_month', 'arrival_date', 'repeated_guest', 
+                             'no_of_previous_cancellations', 'no_of_previous_bookings_not_canceled', 
+                             'avg_price_per_room', 'no_of_special_requests', 
+                             'type_of_meal_plan_Meal Plan 2', 'type_of_meal_plan_Meal Plan 3', 
+                             'type_of_meal_plan_Not Selected', 'room_type_reserved_Room_Type 2', 
+                             'room_type_reserved_Room_Type 3', 'room_type_reserved_Room_Type 4', 
+                             'room_type_reserved_Room_Type 5', 'room_type_reserved_Room_Type 6', 
+                             'room_type_reserved_Room_Type 7', 'market_segment_type_Complementary', 
+                             'market_segment_type_Corporate', 'market_segment_type_Offline', 
+                             'market_segment_type_Online']
+    
+    # Reorder columns to match the model's expected order
+    df = df[expected_column_order]
 
     return df
 
