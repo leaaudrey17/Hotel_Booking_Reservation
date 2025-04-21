@@ -2,6 +2,58 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
+# Mengatur tema pastel dengan CSS
+st.markdown("""
+    <style>
+        body {
+            background-color: #f0f8ff;  /* Light pastel blue */
+            color: #5f6368;  /* Darker text color for contrast */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .stButton>button {
+            background-color: #f7c6c7;  /* Pastel pink */
+            color: white;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .stButton>button:hover {
+            background-color: #f39c9c;  /* Slightly darker pink */
+        }
+
+        .stSelectbox, .stNumberInput {
+            background-color: #e8f8f9;  /* Light pastel teal */
+            border-radius: 8px;
+            border: 1px solid #d0e3e5;
+        }
+
+        .stTitle {
+            color: #3c3c3c;  /* Dark text for titles */
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .stWrite {
+            color: #6e7f7f;
+            font-size: 16px;
+        }
+
+        .stSidebar {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+# Title
+st.title("Hotel Booking Status Prediction")
+st.write("Masukkan data reservasi untuk memprediksi apakah akan dibatalkan atau tidak.")
+
 # Input data dari user
 no_of_adults = st.number_input("Jumlah Dewasa", min_value=0, value=2)
 no_of_children = st.number_input("Jumlah Anak", min_value=0, value=0)
@@ -22,8 +74,6 @@ no_of_previous_bookings_not_canceled = st.number_input("Jumlah Pemesanan Sebelum
 no_of_special_requests = st.number_input("Jumlah Permintaan Khusus", min_value=0, value=0)
 
 # One-hot encoding manual (harus sama dengan preprocessing training)
-
-# Label encoding untuk variabel dengan 2 kelas
 required_car_parking_space = int(required_car_parking_space)
 repeated_guest = int(repeated_guest)
 
