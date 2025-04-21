@@ -7,69 +7,84 @@ from sklearn.preprocessing import StandardScaler
 # Load the trained Random Forest model
 model_rf = joblib.load('model_rf1.pkl')
 
-# Streamlit UI elements with custom CSS for pastel pink theme and aesthetic design
+# Streamlit UI elements with updated aesthetic styles
 st.markdown("""
     <style>
     body {
-        background-color: #f8e2e7;  /* Soft pastel pink background */
-        font-family: 'Arial', sans-serif;
+        background: linear-gradient(45deg, #f8e2e7, #f5c5d7);  /* Soft pink gradient background */
+        font-family: 'Poppins', sans-serif;
+        color: #6f3f56;
     }
     .stButton>button {
         background-color: #f6b8c2;  /* Soft pink for buttons */
         color: white;
-        font-size: 18px;
+        font-size: 20px;
         font-weight: bold;
-        border-radius: 12px;
-        padding: 12px 20px;
+        border-radius: 30px;  /* Rounded edges */
+        padding: 15px 30px;
         border: none;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        transition: background-color 0.3s ease-in-out;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        transition: background-color 0.3s ease, transform 0.2s ease-in-out;
     }
     .stButton>button:hover {
         background-color: #f29bb6;  /* Darker pink on hover */
+        transform: scale(1.05);  /* Slight zoom effect */
     }
     .stSelectbox, .stSlider, .stNumberInput {
         background-color: #fff4f8;  /* Light pink for input fields */
-        border-radius: 8px;
-        margin-top: 10px;
-        padding: 10px;
-        font-size: 14px;
-        border: 1px solid #f3c6d2;
+        border-radius: 12px;
+        margin-top: 12px;
+        padding: 12px;
+        font-size: 16px;
+        border: 2px solid #f3c6d2;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
     .stSelectbox>div>div>input, .stSlider>div>div>input, .stNumberInput>div>div>input {
         padding: 12px;
-        border-radius: 8px;
+        border-radius: 10px;
         border: 1px solid #f6c6d3;
     }
     .stTitle {
         color: #6f3f56;
-        font-size: 32px;
-        font-weight: 600;
-        margin-top: 20px;
+        font-size: 36px;
+        font-weight: 700;
+        text-align: center;
+        margin-top: 30px;
+        letter-spacing: 1px;
     }
     .stText {
         color: #6f3f56;
-        font-size: 16px;
-        margin-top: 10px;
+        font-size: 18px;
+        text-align: center;
+        margin-top: 15px;
     }
     .stAlert {
         background-color: #f8e2e7;  /* Soft pastel pink background for alert */
         padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         margin-top: 20px;
+        font-size: 18px;
+        font-weight: 600;
+        text-align: center;
     }
     .container {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 20px;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 25px;
         margin-top: 30px;
     }
     .card {
         background-color: #ffffff;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        padding: 25px;
+        border-radius: 20px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .stSlider>div>div>div {
+        font-weight: 600;
+    }
+    .stSelectbox>div>div>div {
+        font-weight: 600;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -82,7 +97,7 @@ st.markdown('<hr>', unsafe_allow_html=True)
 # Description of the app with emoji
 st.markdown("""
     <div class="stText">
-    Welcome to the Hotel Booking Cancellation Predictor! Just fill in the details and hit the 'Predict' button to see if your booking is safe or not! 🎉
+    Welcome to the Hotel Booking Cancellation Predictor! 🎉 Fill in the details and click 'Predict' to check if your booking is safe! 🌟
     </div>
 """, unsafe_allow_html=True)
 
@@ -106,8 +121,8 @@ with st.container():
         arrival_month = st.slider('Arrival Month 🌸', min_value=1, max_value=12, value=6)
         arrival_date = st.slider('Arrival Date 📆', min_value=1, max_value=31, value=15)
         repeated_guest = st.selectbox('Repeated Guest 🔄', [0, 1])
-        no_of_previous_cancellations = st.slider('Number of Previous Cancellations ❌', min_value=0, max_value=13, value=0)
-        no_of_previous_bookings_not_canceled = st.slider('Number of Previous Bookings Not Canceled ✅', min_value=0, max_value=58, value=0)
+        no_of_previous_cancellations = st.slider('Previous Cancellations ❌', min_value=0, max_value=13, value=0)
+        no_of_previous_bookings_not_canceled = st.slider('Previous Bookings Not Canceled ✅', min_value=0, max_value=58, value=0)
 
     st.markdown('<hr>', unsafe_allow_html=True)
 
@@ -159,16 +174,11 @@ input_data = pd.DataFrame({
     'market_segment_type_Online': [1 if market_segment_type == 'Online' else 0],
 })
 
-# Handle outliers and scale numeric features (as before)
-numerical_cols = ['no_of_adults', 'no_of_children', 'no_of_weekend_nights', 'no_of_week_nights',
-                  'lead_time', 'avg_price_per_room', 'no_of_previous_cancellations',
-                  'no_of_previous_bookings_not_canceled', 'no_of_special_requests', 'arrival_year']
-
+# Handle outliers using IQR
+numerical_cols = input_data.select_dtypes(include=[np.number]).columns
 Q1 = input_data[numerical_cols].quantile(0.25)
 Q3 = input_data[numerical_cols].quantile(0.75)
 IQR = Q3 - Q1
-
-# Remove outliers based on IQR
 input_data = input_data[~((input_data[numerical_cols] < (Q1 - 1.5 * IQR)) | (input_data[numerical_cols] > (Q3 + 1.5 * IQR))).any(axis=1)]
 
 # Standardize numerical features
@@ -179,11 +189,11 @@ input_data[numerical_cols] = scaler.fit_transform(input_data[numerical_cols])
 if st.button('Predict! 🎉'):
     prediction = model_rf.predict(input_data)
 
-    # Display result with emoji and shorter text
+    # Display result with emoji and short, fun text
     if prediction[0] == 1:
         st.markdown(f"""
             <div class="stAlert">
-                <strong>Uh-oh! 😕</strong><br> Your booking might be canceled! 😱 Double-check your details and try again! 
+                <strong>Uh-oh! 😕</strong><br> Your booking might be canceled! 😱 Check your details and try again! 
             </div>
         """, unsafe_allow_html=True)
     else:
