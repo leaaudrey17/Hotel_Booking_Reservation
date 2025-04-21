@@ -82,7 +82,6 @@ input_data[numerical_cols] = input_data[numerical_cols].apply(lambda x: np.where
 scaler = StandardScaler()
 input_data[numerical_cols] = scaler.fit_transform(input_data[numerical_cols])
 
-# Prediction when the user clicks the button
 if st.button('Predict'):
     prediction = model_rf.predict(input_data)
     st.write(f'Predicted Booking Status: {"Not Canceled" if prediction[0] == "Not_Canceled" else "Canceled"}')
