@@ -5,7 +5,7 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 
 # Load the trained Random Forest model
-model_rf = joblib.load('random_forest_model1.pkl')
+model_rf = joblib.load('model_rf1.pkl')
 
 # Streamlit UI elements
 st.title('Hotel Booking Cancellation Prediction')
@@ -29,8 +29,8 @@ no_of_special_requests = st.number_input('Number of Special Requests', min_value
 
 # Encoding categorical features (e.g., meal plan, room type, market segment)
 type_of_meal_plan = st.selectbox('Meal Plan Type', ['Meal Plan 1', 'Meal Plan 2', 'Meal Plan 3', 'Not Selected'])
-room_type_reserved = st.selectbox('Room Type Reserved', ['Room Type 2', 'Room Type 3', 'Room Type 4', 'Room Type 5', 'Room Type 6', 'Room Type 7'])
-market_segment_type = st.selectbox('Market Segment Type', ['Complementary', 'Corporate', 'Offline', 'Online'])
+room_type_reserved = st.selectbox('Room Type Reserved', ['Room Type 1', 'Room Type 2', 'Room Type 3', 'Room Type 4', 'Room Type 5', 'Room Type 6', 'Room Type 7'])
+market_segment_type = st.selectbox('Market Segment Type', ['Aviation', 'Complementary', 'Corporate', 'Offline', 'Online'])
 
 # Prepare the input data for the model
 input_data = pd.DataFrame({
@@ -48,15 +48,18 @@ input_data = pd.DataFrame({
     'no_of_previous_bookings_not_canceled': [no_of_previous_bookings_not_canceled],
     'avg_price_per_room': [avg_price_per_room],
     'no_of_special_requests': [no_of_special_requests],
+    'type_of_meal_plan_Meal Plan 1': [1 if type_of_meal_plan == 'Meal Plan 1' else 0],
     'type_of_meal_plan_Meal Plan 2': [1 if type_of_meal_plan == 'Meal Plan 2' else 0],
     'type_of_meal_plan_Meal Plan 3': [1 if type_of_meal_plan == 'Meal Plan 3' else 0],
     'type_of_meal_plan_Not Selected': [1 if type_of_meal_plan == 'Not Selected' else 0],
+    'room_type_reserved_Room_Type 1': [1 if room_type_reserved == 'Room Type 1' else 0],
     'room_type_reserved_Room_Type 2': [1 if room_type_reserved == 'Room Type 2' else 0],
     'room_type_reserved_Room_Type 3': [1 if room_type_reserved == 'Room Type 3' else 0],
     'room_type_reserved_Room_Type 4': [1 if room_type_reserved == 'Room Type 4' else 0],
     'room_type_reserved_Room_Type 5': [1 if room_type_reserved == 'Room Type 5' else 0],
     'room_type_reserved_Room_Type 6': [1 if room_type_reserved == 'Room Type 6' else 0],
     'room_type_reserved_Room_Type 7': [1 if room_type_reserved == 'Room Type 7' else 0],
+    'market_segment_type_Aviation': [1 if market_segment_type == 'Aviation' else 0],
     'market_segment_type_Complementary': [1 if market_segment_type == 'Complementary' else 0],
     'market_segment_type_Corporate': [1 if market_segment_type == 'Corporate' else 0],
     'market_segment_type_Offline': [1 if market_segment_type == 'Offline' else 0],
@@ -82,6 +85,7 @@ input_data[numerical_cols] = input_data[numerical_cols].apply(lambda x: np.where
 scaler = StandardScaler()
 input_data[numerical_cols] = scaler.fit_transform(input_data[numerical_cols])
 
+# Prediction
 if st.button('Predict'):
     prediction = model_rf.predict(input_data)
-    st.write(f'Predicted Booking Status: {"Not Canceled" if prediction[0] == "Not_Canceled" else "Canceled"}')
+    st.write(f'Predicted Booking Status: {"Not Canceled" if prediction[0] == 0 else "Canceled"}')
