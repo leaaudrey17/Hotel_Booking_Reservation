@@ -5,7 +5,7 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 
 # Load the trained Random Forest model
-model_rf = joblib.load('model_xg1.pkl')
+model_xg = joblib.load('model_xg1.pkl')
 
 # Streamlit UI elements with updated aesthetic styles
 st.markdown("""
@@ -188,7 +188,7 @@ input_data[numerical_cols] = scaler.fit_transform(input_data[numerical_cols])
 # Prediction when user clicks "Predict"
 if st.button('Predict! 🎉'):
     # Get probabilities for each class (Canceled, Not Canceled)
-    prediction_proba = model_rf.predict_proba(input_data)
+    prediction_proba = model_xg.predict_proba(input_data)  # Ganti model_rf dengan model_xg
 
     # Extract the probability for the "Canceled" class (index 1)
     canceled_prob = prediction_proba[0][1]
@@ -213,3 +213,4 @@ if st.button('Predict! 🎉'):
                 Enjoy your stay, no worries!
             </div>
         """, unsafe_allow_html=True)
+
