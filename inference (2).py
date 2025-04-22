@@ -5,7 +5,7 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 
 # Load the trained Random Forest model
-model_rf = joblib.load('model_rf1.pkl')
+model_rf = joblib.load('model_xg1.pkl')
 
 # Streamlit UI elements with updated aesthetic styles
 st.markdown("""
